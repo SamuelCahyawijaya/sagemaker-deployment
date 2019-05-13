@@ -67,10 +67,27 @@ def train(model, train_loader, epochs, optimizer, loss_fn, device):
     device       - Where the model and data should be loaded (gpu or cpu).
     """
     
+    model = model.to(device)
+    loss_fn = loss_fn.to(device)
+    
     # TODO: Paste the train() method developed in the notebook here.
+    print('== Train Model ==')
+    for epoch in range(1, epochs):
+        total_loss = 0
+        
+        print('= Start epoch-{} ='.format(epoch))
+        for idx, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
 
-    pass
+            pred = model(x)
+            loss = loss_fn(pred, y)
 
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            
+            total_loss += loss.data.item()
 
 if __name__ == '__main__':
     # All of the model parameters and training parameters are sent as arguments when the script
